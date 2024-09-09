@@ -7,35 +7,27 @@ export default class App extends React.Component {
     super();
     this.state = {
       photos: [],
-      loading: true
+      loading: false
     };
   }
 
-  // Use the required lifecycle methods here
-  static getDerivedStateFromProps(){
-    return null;
+  componentDidMount() {
+    this.setState({ loading: true });
+    fetch("https://jsonplaceholder.typicode.com/albums/1/photos")
+      .then((res) => res.json())
+      .then((data) => this.setState({ photos: data }))
+      .finally(() => this.setState({ loading: false }));
   }
-  componentDidMount(){
-       fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
-            .then(response => response.json())
-            .then(photo => this.setState({photos: photo, loading: false}))
-            .catch((err) => {
-              console.log(err)
-              this.setState({loading: false})
-            })
-  }
+
   render() {
-    // Display loading status here
-    const {photos, loading} = this.state;
+    if (this.state.loading) {
+      return <p>Loading...</p>;
+    }
     return (
       <div className="App">
-        {loading?
-        (<p>Loading...</p>)
-      :
-      (photos.map((photo) => {
-        return <Image key={photo.id} photo={photo} />;
-      }))
-      }
+        {this.state.photos.map((photo) => {
+          return <Image key={photo.id} photo={photo} />;
+        })}
       </div>
     );
   }

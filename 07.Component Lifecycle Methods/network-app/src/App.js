@@ -15,14 +15,14 @@ class App extends Component {
           show: true
         },
         {
-          id: 1,
+          id: 2,
           img:
             "https://res.cloudinary.com/dl26pbek4/image/upload/v1675071807/pexels-zaid-mohammed-15131063_bysy0s.jpg",
           email: "stephen@gmail.com",
           show: true
         },
         {
-          id: 1,
+          id: 3,
           img:
             "https://res.cloudinary.com/dl26pbek4/image/upload/v1675071812/pexels-ali-kazal-14520051_qrdgym.jpg",
           email: "alex@gmail.com",
@@ -32,25 +32,28 @@ class App extends Component {
     };
   }
 
-  // Create function to remove person from your network here
-  removePerson = (index) => {
-    console.log(index);
-    const updatedNetwork = [...this.state.network];
-    updatedNetwork[index].show=false;
-    this.setState({network: updatedNetwork});
+  handleRemove = (i) => {
+    const network = [...this.state.network];
+    network[i].show = false;
+    this.setState({ network });
   };
-  
 
   render() {
-    console.log(this.state.network);
     return (
       <div className="App">
         <h1>My Network</h1>
         <div className="list">
-          {this.state.network.map((p, i) => (
-            p.show&&
-            <Person key={i} person={p} index={i} removePerson={this.removePerson}/>
-          ))}
+          {this.state.network.map(
+            (p, i) =>
+              p.show && (
+                <Person
+                  key={p.id}
+                  person={p}
+                  index={i}
+                  onRemove={this.handleRemove}
+                />
+              )
+          )}
         </div>
       </div>
     );
