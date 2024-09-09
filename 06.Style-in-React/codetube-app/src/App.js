@@ -1,47 +1,38 @@
 import "./styles.css";
-import List from "./List";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
-import {Component} from "react";
-import { courses } from "./data";
+import { Component } from "react";
+import { List } from "./List";
+import { Form } from "./Form";
 
-class App extends Component{
+export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { bagItems: []
-
-   };
+    this.state = {
+      todos: [
+        { text: "Do the laundry" },
+        { text: "Iron the clothes" },
+        { text: "Go for a walk" }
+      ]
+    };
   }
 
-  isCourseinBag = (id) => {
-    return !!this.state.bagItems.find((c) => c.id === id);
+  handleAdd = (text) => {
+    this.setState((prev) => ({
+      todos: [{ text }, ...prev.todos]
+    }));
   };
 
-  handleAddToBag = (id) => {
-    const course = courses.find((c) => c.id === id);
-    this.setState({ bagItems: [course, ...this.state.bagItems] });
+  handleRemove = (text) => {
+    const filteredTodos = this.state.todos.filter((todo) => todo.text !== text);
+    this.setState({ todos: filteredTodos });
   };
 
-  handleRemoveFromBag = (id) => {
-    const filteredCourses = this.state.bagItems.filter((c) => c.id !== id);
-    this.setState({ bagItems: filteredCourses });
-  };
   render() {
-    const {bagItems} = this.state;
     return (
-    <div className="App">
-      <Navbar bagCount={bagItems.length}/>
-      <h3>CodeTube Catalog</h3>
-      <div className="container">
-        <List courses={courses}
-        bagItems={bagItems}
-        isCourseinBag={this.isCourseinBag}
-        handleAddToBag={this.handleAddToBag}
-        handleRemoveFromBag={this.handleRemoveFromBag}/>
-        <Sidebar />
+      <div className="App">
+        <span>Todo</span>
+        <Form onAdd={this.handleAdd} />
+        <List todos={this.state.todos} onRemove={this.handleRemove} />
       </div>
-    </div>
-  );
+    );
   }
 }
-export default App;

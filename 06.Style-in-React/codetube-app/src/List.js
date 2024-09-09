@@ -1,27 +1,14 @@
 import { Component } from "react";
-import Course from "./components/Course";
-import { courses } from "./data";
-import { Container } from "./reusable.styled";
+import { Todo } from "./Todo";
 
-class List extends Component {
-
+export class List extends Component {
   render() {
-    const {handleAddToBag, handleRemoveFromBag, isCourseinBag} = this.props;
     return (
-      <Container flex="3">
-        {courses.map((v) => (
-          <Course
-            key={v.id}
-            video={v}
-            isCourseinBag={isCourseinBag}
-            onAdd={handleAddToBag}
-            onRemove={handleRemoveFromBag}
-            isInBag={isCourseinBag(v.id)}
-          />
+      <div className="list">
+        {this.props.todos.map((todo, i) => (
+          <Todo key={i} todo={todo} onRemove={this.props.onRemove} />
         ))}
-      </Container>
+      </div>
     );
   }
 }
-
-export default List;
